@@ -1,0 +1,183 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Counter</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            background: white;
+            width: 500px;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 180px;
+            padding: 12px;
+            box-sizing: border-box;
+            border: 2px solid #ccc;
+            border-radius: 8px;
+            font-size: 16px;
+            resize: none;
+            outline: none;
+        }
+
+        textarea:focus {
+            border-color: #555;
+        }
+
+        .counter {
+            margin-top: 15px;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        #count {
+            font-weight: bold;
+        }
+
+        #remaining {
+            font-weight: bold;
+        }
+
+        #warning {
+            margin-top: 12px;
+            color: #d9534f;
+            font-weight: bold;
+            display: none;
+        }
+
+        button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #333;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #555;
+        }
+
+        .near-limit {
+            color: orange;
+        }
+
+        .limit-reached {
+            color: red;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <h1>Character Counter</h1>
+
+        <textarea
+            id="textInput"
+            maxlength="100"
+            placeholder="Type something here...">
+        </textarea>
+
+        <div class="counter">
+            <span>Characters: <span id="count">0</span>/100</span>
+            <span>Remaining: <span id="remaining">100</span></span>
+        </div>
+
+        <div class="counter">
+            <span>Words: <span id="wordCount">0</span></span>
+        </div>
+
+        <div id="warning">
+            You have reached the 100 character limit!
+        </div>
+
+        <button id="clearBtn">Clear</button>
+    </div>
+
+    <script>
+        const textInput = document.getElementById("textInput");
+        const count = document.getElementById("count");
+        const wordCount = document.getElementById("wordCount");
+        const remaining = document.getElementById("remaining");
+        const warning = document.getElementById("warning");
+        const clearBtn = document.getElementById("clearBtn");
+
+        textInput.addEventListener("input", function () {
+
+            const text = textInput.value;
+            const characterCount = text.length;
+
+            // Character count
+            count.textContent = characterCount;
+
+            // Remaining characters
+            remaining.textContent = 100 - characterCount;
+
+            // Word count
+            const words = text.trim() === ""
+                ? 0
+                : text.trim().split(/\s+/).length;
+
+            wordCount.textContent = words;
+
+            // Change counter color near the limit
+            count.classList.remove("near-limit", "limit-reached");
+
+            if (characterCount >= 100) {
+                count.classList.add("limit-reached");
+                warning.style.display = "block";
+            } 
+            else if (characterCount >= 80) {
+                count.classList.add("near-limit");
+                warning.style.display = "none";
+            } 
+            else {
+                warning.style.display = "none";
+            }
+        });
+
+        // Clear button
+        clearBtn.addEventListener("click", function () {
+            textInput.value = "";
+
+            count.textContent = "0";
+            remaining.textContent = "100";
+            wordCount.textContent = "0";
+
+            count.classList.remove("near-limit", "limit-reached");
+            warning.style.display = "none";
+
+            textInput.focus();
+        });
+    </script>
+
+</body>
+</html>
+```
